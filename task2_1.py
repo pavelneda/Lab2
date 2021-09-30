@@ -8,7 +8,7 @@ class Rectangle:
         else:
             return None
     def getter(self):
-        return "Length:",self.length,"Width:",self.width
+        return self.length,self.width
     def area(self):
         return self.length*self.width
     def perimeter(self):
