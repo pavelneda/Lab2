@@ -2,7 +2,7 @@ class Rectangle:
     def __init__(self,length=1,width=1):
         self.setter(length,width)
     def setter(self,length,width):
-        if 20>=x>=0 and 20>=y>=0:
+        if 20>=x>0 and 20>=y>0:
             self.length=length
             self.width=width
         else:
