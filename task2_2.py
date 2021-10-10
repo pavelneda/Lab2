@@ -7,48 +7,54 @@ class Rational:
         
     def reducefraction(self,x,y):
         k = math.gcd(x,y)
+        if y<0:
+            y=-y
+            x=-x
         return (x//k, y//k)
       
     def numbers(self):
-        return str(self.__numerator)+'/'+str(self.__denominator)
+        return f'{self.__numerator}/{self.__denominator}'
         
     def floatingnumbers(self):
         return  float(self.__numerator)/self.__denominator
         
     def __add__(self,other):
-        if type(other)==type(self):
+        if isinstance(other,Rational):
             denominator=int(self.__denominator*other.__denominator/math.gcd(self.__denominator,other.__denominator))
             numerator=int(denominator/self.__denominator*self.__numerator+denominator/other.__denominator*other.__numerator)
             k = self.reducefraction(int(numerator), int(denominator))
         else: 
-            return False
+            raise TypeError
         return Rational(k[0],k[1]) 
     
     def __sub__(self,other):
-        if type(other)==type(self):
+        if isinstance(other,Rational):
             denominator=int(self.__denominator*other.__denominator/math.gcd(self.__denominator,other.__denominator))
             numerator=int(denominator/self.__denominator*self.__numerator-denominator/other.__denominator*other.__numerator) 
             k=self.reducefraction(int(numerator),int(denominator))
         else: 
-            return False
+            raise TypeError
         return Rational(k[0],k[1])
         
     def __mul__(self,other):
-        if type(other)==type(self):
+        if isinstance(other,Rational):
             denominator=self.__denominator*other.__denominator
             numerator=self.__numerator*other.__numerator
             k=self.reducefraction(int(numerator),int(denominator))
         else: 
-            return False
+            raise TypeError
         return Rational(k[0],k[1])
     
     def __truediv__(self,other):
-        if type(other)==type(self) and other.floatingnumbers():
-            denominator=self.__denominator*other.__numerator
-            numerator=self.__numerator*other.__denominator
-            k=self.reducefraction(int(numerator),int(denominator))
+        if isinstance(other,Rational):
+            if other.floatingnumbers():
+                denominator=self.__denominator*other.__numerator
+                numerator=self.__numerator*other.__denominator
+                k=self.reducefraction(int(numerator),int(denominator))
+            else:
+                raise ZeroDivisionError
         else: 
-            return False
+            raise TypeError
         return Rational(k[0],k[1])
         
 try:
@@ -56,11 +62,11 @@ try:
     secondfractione=input()
     a=list(map(int,firstfractione.split('/')))
     b=list(map(int,secondfractione.split('/')))
-    if a[1] and len(a)==2 and b[1] and len(b)==2:
+    if len(a)==2 and a[1] and len(b)==2 and b[1]:
         A=Rational(a[0],a[1])
         B=Rational(b[0],b[1])
     else:
-        raise
+        raise ValueError
     print("Form a/b(first): "+A.numbers())
     print("Floatint-point format(first): "+str(A.floatingnumbers()))
     print("Form a/b(second): "+B.numbers())
@@ -73,6 +79,11 @@ try:
     print("A-B="+C.numbers())
     C=A/B
     print("A/B="+C.numbers())
-
-except:
-    print("None")
+except TypeError:
+    print("Type error")
+except ValueError:
+    print("Enter correct values")
+except ZeroDivisionError:
+    print("Вivision by zero")
+except NameError:
+    print("Name error")
