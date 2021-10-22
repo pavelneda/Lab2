@@ -10,26 +10,24 @@ class Rectangle:
         return self.__width
     @length.setter
     def length(self,length):
-        if 20>=length>0:
-            self.__length=length
-        else:
-            raise ValueError 
+        if not 20>=length>0:
+            raise ValueError
+        self.__length=length 
     @width.setter
     def width(self,width):
-        if 20>=width>0:
-            self.__width=width
-        else:
+        if not 20>=width>0:
             raise ValueError
+        self.__width=width
     def area(self):
-        return f'Area: {self.__length*self.__width}'
+        return self.__length*self.__width
     def perimeter(self):
-        return f'Perimeter: {(self.__length+self.__width)*2}'
+        return (self.__length+self.__width)*2
 try:
     x=float(input())
     y=float(input())
     A=Rectangle(x,y)
-    print(A.area())
-    print(A.perimeter())
+    print(f'Area: {A.area()}')
+    print(f'Perimeter: {A.perimeter()}')
     A.length=10
     A.width=10
     print(A.length,A.width)

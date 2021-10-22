@@ -1,59 +1,57 @@
 class Product:
     def __init__(self,name,price,desc,dimens):
-        if type(name)==str and type(price)==int and type(desc)==str and type(dimens)==str :
-            if name.isalpha() and price >=0 and desc and dimens:
-                self.name=name
-                self.price=price
-                self.desc=desc
-                self.dimens=dimens
-            else:
-                raise ValueError
-        else: 
+        if not(isinstance(name,str) and isinstance(price,int) and isinstance(desc,str) and isinstance(dimens,str)):
             raise TypeError
+        if not(name.isalpha() and price >=0 and desc and dimens):
+            raise ValueError
+        self.__name=name
+        self.price=price
+        self.__desc=desc
+        self.__dimens=dimens
     def __str__(self):
-        return f'Name:{self.name}, Price:{self.price}, Description:{self.desc}, Dimensions:{self.dimens}'
+        return f'Name:{self.__name}, Price:{self.price}, Description:{self.__desc}, Dimensions:{self.__dimens}'
 class Customer:
     def __init__(self,surname,name,patronymic,phone,city):
-        if type(surname)==str and type(name)==str and type(patronymic)==str and type(phone)==str and type(city)==str:
-            if surname.isalpha() and name.isalpha() and patronymic.isalpha() and phone and city:
-                self.surname=surname
-                self.name=name
-                self.patronymic=patronymic
-                self.phone=phone
-                self.city=city
-            else:
-                raise ValueError
-        else:
+        if not(isinstance(surname,str) and isinstance(name,str) and isinstance(patronymic,str) and isinstance(phone,str) and isinstance(city,str)):
             raise TypeError
+        if not(surname.isalpha() and name.isalpha() and patronymic.isalpha() and phone and city):
+            raise ValueError
+        self.__surname=surname
+        self.__name=name
+        self.__patronymic=patronymic
+        self.__phone=phone
+        self.__city=city
     def __str__(self):
-        return f'Surname:{self.surname}, Name:{self.name}, Patronymic:{self.patronymic}, Phone:{self.phone}, City:{self.city}'
+        return f'Surname:{self.__surname}, Name:{self.__name}, Patronymic:{self.__patronymic}, Phone:{self.__phone}, City:{self.__city}'
 class Order:
     def __init__(self,customer,*products):
-        if isinstance(customer,Customer) and all(isinstance(product,Product) for product in products):
-            self.customer=customer
-            self.products=list(products)
-        else:
+        if not(isinstance(customer,Customer) and all(isinstance(product,Product) for product in products)):
             raise TypeError
+        self.__customer=customer
+        self.__products=list(products)
+    def __str__(self):
+        return f'{self.__customer}. Total value: {self.total_value()}'
     def total_value(self):
         total=0
-        for product in self.products:
+        for product in self.__products:
             total+=product.price
-        return f'Total value: {total}'
+        return total
+        
     def addproducts(self,*products):
-        if all(isinstance(product,Product) for product in products):
-            self.products+=list(products)
-        else:
+        if not all(isinstance(product,Product) for product in products):
             raise TypeError
+        self.__products+=list(products)
+        
     def delproducts(self,*products):
-        if all(isinstance(product,Product) for product in products):
-            for product in products:
-                self.products.remove(product)
-        else:
+        if not all(isinstance(product,Product) for product in products):
             raise TypeError
+        for product in products:
+            self.__products.remove(product)
+            
     def infoprod(self):
-        return self.products
+        return self.__products
     def infocust(self):
-        return self.customer
+        return self.__customer
 
 try:
     milk=Product("milk",100,"white","1L")
@@ -63,11 +61,7 @@ try:
     first=Order(pavlo,milk,apple)
     first.addproducts(orange)
     first.delproducts(apple)
-    print(first.infocust())
-    information=list(first.infoprod())
-    for x in information:
-        print(x)
-    print(first.total_value())
+    print(first)
 except ValueError:
     print("Enter correct values")
 except TypeError:
